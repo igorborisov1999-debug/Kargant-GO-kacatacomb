@@ -5,6 +5,13 @@
     border: 0;
 }
 
+body {
+  -webkit-user-select: none; /* Для Chrome/Safari */
+  -moz-user-select: none;    /* Для Firefox */
+  -ms-user-select: none;     /* Для IE/Edge */
+  user-select: none;        /* Стандартное свойство */
+}
+
 *,
 *:before,
 *:after {
