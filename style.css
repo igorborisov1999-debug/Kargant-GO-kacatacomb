@@ -6,10 +6,14 @@
 }
 
 body {
-  -webkit-user-select: none; /* Для Chrome/Safari */
-  -moz-user-select: none;    /* Для Firefox */
-  -ms-user-select: none;     /* Для IE/Edge */
-  user-select: none;        /* Стандартное свойство */
+    -webkit-user-select: none;
+    /* Для Chrome/Safari */
+    -moz-user-select: none;
+    /* Для Firefox */
+    -ms-user-select: none;
+    /* Для IE/Edge */
+    user-select: none;
+    /* Стандартное свойство */
 }
 
 *,
@@ -126,6 +130,100 @@ body {
 
 #GamepPlayUP {
     display: flex;
+    height: 70vh; 
+    min-height: 400px;
+}
+.scrollable-panel {
+  width: 250px;
+  padding: 10px;
+  overflow-y: auto;
+  border: 1px solid #333;
+}
+
+#MainScreen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.centered-map {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  overflow: auto;
+}
+
+#GameMenuLeft {
+    width: 300px;
+    height: 500px;
+    padding: 10px;
+    overflow: hidden;
+    border-right: 1px solid #333;
+}
+
+.log-container {
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #555 #222;
+    overflow-x: hidden;
+}
+
+.log-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+.log-container::-webkit-scrollbar-thumb {
+    background-color: #555;
+}
+
+.log-entry {
+    margin-bottom: 8px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.log-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@keyframes textPulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.02);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.log-important {
+    animation: textPulse 0.5s ease 3;
+}
+
+.log-player {
+    color: white;
+}
+
+.log-friendly {
+    color: #4CAF50;
+    /* Зеленый */
+}
+
+.log-hostile {
+    color: #F44336;
+    /* Красный */
 }
 
 #DungeonMap {
@@ -149,7 +247,7 @@ body {
 }
 
 .DungeonMap__cell_mist {
-    color: #000;
+    color: #726e6e;
 }
 
 .DungeonMap__cell_choice {
@@ -251,13 +349,13 @@ body {
 
 .hover {
     color: red;
-    display:inline-flex;
+    display: inline-flex;
 }
 
 /* задаем относительное позиционирование контейнеру */
 .block {
     position: relative;
-    
+
 }
 
 /* Оформление скрытого элемента по умолчанию */
