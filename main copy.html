@@ -6,7 +6,7 @@
   <title>RPG Adventure</title>
   <link rel="stylesheet" href="style.css">
   <script src="Tabl.js"></script>
-   <script src="main.js"></script> 
+  <script src="main.js"></script>
 </head>
 
 <body>
@@ -26,28 +26,29 @@
 
   <div id="GamepPlay">
     <div id="GamepPlayUP">
-      <div id="GameMenuLeft">
+      <div id="GameMenuLeft" class="scrollable-panel">
+        <!-- Логи будут здесь -->
       </div>
-      <div id="DungeonMap">
+
+      <div id="MainScreen">
+        <div id="DungeonMap" class="centered-map">
+          <!-- Карта будет здесь -->
+        </div>
+        <div id="DungeonEvent" style="display:none;">
+          <!-- События -->
+        </div>
       </div>
-      <div id="GameMenuRight">
+
+      <div id="GameMenuRight" class="scrollable-panel">
+        <!-- Описание комнаты -->
       </div>
     </div>
     <div id="GameMenuBottom">
-      <div class="block"> 
-        Ваше имя -   
-          <div class="hover"> ${Kargant.Name}</div>  
-        <span class="hidden"><p>Ваше имя <span style="color:red">${Kargant.Name}</span></p>
-        <p>Ваше имя <span style="color:red">${Kargant.Name}</span></p></span> 
-      <div class="block"> 
-        Ваше имя -   
-          <div class="hover"> ${Kargant.Name}</div>  
-        <span class="hidden"><p>Ваше имя <span style="color:red">${Kargant.Name}</span></p>
-        <p>Ваше имя <span style="color:red">${Kargant.Name}</span></p></span> 
+      <div id="roomActions" style="display: none;">
+        <button id="searchDoorsBtn" class="button">Искать двери</button>
+        <button id="confirmDoorsBtn" class="button" style="display: none;">Готово</button>
+        <button id="moveOnBtn" class="button">Идти дальше</button>
       </div>
-      <p>Ваше имя <span style="color:red">${Kargant.Name}</span></p>
-
-      <p>А также <span style="color:red">${Kargant.Gold} </span> монет</p>
       <button class="button" onclick="PathChoice()"> ВЫБРАТЬ </button>
     </div>
   </div>
@@ -55,14 +56,18 @@
   <script>
 
     let Kargant;
+    const gameLogger = new GameLogger();
 
     setTimeout(
       () => {
         document.getElementsByClassName('button')[0].style.display = 'flex';
       }, 2500);
+
+    GeneratePerson();
+    openMap();
      
-      // GeneratePerson();
-      // openMap();
+    window.addEventListener('load', resizePanels);
+    window.addEventListener('resize', resizePanels);
 
   </script>
 </body>
