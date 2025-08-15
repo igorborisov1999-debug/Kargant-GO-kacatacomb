@@ -83,7 +83,7 @@ function GetMap() {
                 cellClass = '';
             }
 
-            map += ` <div class= "DungeonMap__cell ${cellClass}" id = '${'' + x + ',' + y}'> ${s} </div>`; //▣
+            map += ` <div class= "DungeonMap__cell ${cellClass}" id = '${'' + x  + y}'> ${s} </div>`; //▣
         }
         map += `</div>`;
     }
@@ -96,17 +96,20 @@ function openMap() {
     document.getElementById("DungeonMap").innerHTML = GetMap();
     document.getElementsByClassName('button')[2].style.display = 'flex';
     updateGameUI();
+    gameLogger.addLog("Вы вошли в КРИПТУ", 'player', {important: true  });
 }
 
 
 function PathChoice() {
+
     lines = [];
-    lines.push(document.getElementById(`${Kargant.Coordinates.x}${Kargant.Coordinates.y + 1}`));
-    lines.push(document.getElementById(`${Kargant.Coordinates.x}${Kargant.Coordinates.y - 1}`));
-    lines.push(document.getElementById(`${Kargant.Coordinates.x + 1}${Kargant.Coordinates.y}`));
-    lines.push(document.getElementById(`${Kargant.Coordinates.x - 1}${Kargant.Coordinates.y}`));
+    lines.push(document.getElementById(`${Kargant.coordinates.x}${Kargant.coordinates.y + 1}`));
+    lines.push(document.getElementById(`${Kargant.coordinates.x}${Kargant.coordinates.y - 1}`));
+    lines.push(document.getElementById(`${Kargant.coordinates.x + 1}${Kargant.coordinates.y}`));
+    lines.push(document.getElementById(`${Kargant.coordinates.x - 1}${Kargant.coordinates.y}`));
 
     for (let i = 0; i < 4; i++) {
+        console.log(lines[i]);
         lines[i].classList.add("DungeonMap__cell_choice");
         lines[i].addEventListener('click',
             (e) => {
@@ -120,13 +123,29 @@ function PathChoice() {
 function updateGameUI() {
     if (!Kargant) return;
 
-    const GameMenuLeft = document.getElementById("GameMenuLeft");
-
-    GameMenuLeft.innerHTML = `
-        <p>Имя: <span class="CoolRed">${Kargant.name}</span></p>
-        <p>Класс: <span class="CoolRed">${Kargant.specialization}</span></p> `;
-
     const GameMenuRight = document.getElementById("GameMenuRight");
     GameMenuRight.innerHTML = updateCharacterInfo();
 
+}
+
+function showRoomActions(room) {
+  currentRoom = room;
+  document.getElementById('roomActions').style.display = 'block';
+  
+  if (room.cleared && !room.searched) {
+    document.getElementById('searchDoorsBtn').style.display = 'block';
+  } else {
+    document.getElementById('searchDoorsBtn').style.display = 'none';
+  }
+}
+
+function resizePanels() {
+  const map = document.getElementById('DungeonMap');
+  const leftPanel = document.getElementById('GameMenuLeft');
+  const rightPanel = document.getElementById('GameMenuRight');
+  
+  // Устанавливаем одинаковую высоту
+  const height = map.offsetHeight + 'px';
+  leftPanel.style.height = height;
+  rightPanel.style.height = height;
 }
