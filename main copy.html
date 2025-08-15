@@ -27,15 +27,10 @@
   <div id="GamepPlay">
     <div id="GamepPlayUP">
       <div id="GameMenuLeft">
-        <p>Ваше имя <span class="CoolRed">${Kargant.Name}</span></p>
-        <p>А также <span style="color:red">${Kargant.Gold} </span> монет</p>
       </div>
       <div id="DungeonMap">
       </div>
       <div id="GameMenuRight">
-        <p>Ваше имя <span style="color:red">${Kargant.Name}</span></p>
-
-        <p>А также <span style="color:red">${Kargant.Gold} </span> монет</p>
       </div>
     </div>
     <div id="GameMenuBottom">
@@ -43,13 +38,12 @@
         Ваше имя -   
           <div class="hover"> ${Kargant.Name}</div>  
         <span class="hidden"><p>Ваше имя <span style="color:red">${Kargant.Name}</span></p>
-        <p>Ваше имя <span style="color:red">${Kargant.Name}</span></p></span> <!-- скрытый элемент -->
-      </div>
+        <p>Ваше имя <span style="color:red">${Kargant.Name}</span></p></span> 
       <div class="block"> 
         Ваше имя -   
           <div class="hover"> ${Kargant.Name}</div>  
         <span class="hidden"><p>Ваше имя <span style="color:red">${Kargant.Name}</span></p>
-        <p>Ваше имя <span style="color:red">${Kargant.Name}</span></p></span> <!-- скрытый элемент -->
+        <p>Ваше имя <span style="color:red">${Kargant.Name}</span></p></span> 
       </div>
       <p>Ваше имя <span style="color:red">${Kargant.Name}</span></p>
 
@@ -66,61 +60,9 @@
       () => {
         document.getElementsByClassName('button')[0].style.display = 'flex';
       }, 2500);
-
-
-  
-    function openMap() {
-      document.getElementById("MainMenu").style.display = "none";
-      document.getElementById("GamepPlay").style.display = "flex";
-      document.getElementById("DungeonMap").innerHTML = GetMap();
-      document.getElementsByClassName('button')[2].style.display = 'flex';
-    }
-
-    function GetMap() {
-      map = '';
-      for (x = 0; x < 27; x++) {
-        map += `<div class='DungeonMap__Column'>`;
-        if (x % 2 != 0) {
-          s1 = '|'; s2 = '▢';
-        } else {
-          s1 = '◌'; s2 = '-';
-        }
-        for (y = 0; y < 27; y++) {
-          if (y % 2 == 0) {
-            s = s1;
-          } else {
-            s = s2;
-          }
-          cellClass = "DungeonMap__cell_mist";
-          if (y == 13 & x == 13) {
-            s = '▣';
-            cellClass = '';
-          }
-
-          map += ` <div class= "DungeonMap__cell ${cellClass}" id = '${'' + x + ',' + y}'> ${s} </div>`; //▣
-        }
-        map += `</div>`;
-      }
-      return map;
-    }
-
-    function PathChoice() {
-      lines = [];
-      lines.push(document.getElementById(`${Kargant.Coordinates.x}${Kargant.Coordinates.y + 1}`));
-      lines.push(document.getElementById(`${Kargant.Coordinates.x}${Kargant.Coordinates.y - 1}`));
-      lines.push(document.getElementById(`${Kargant.Coordinates.x + 1}${Kargant.Coordinates.y}`));
-      lines.push(document.getElementById(`${Kargant.Coordinates.x - 1}${Kargant.Coordinates.y}`));
-
-      for (let i = 0; i < 4; i++) {
-        lines[i].classList.add("DungeonMap__cell_choice");
-        lines[i].addEventListener('click',
-          (e) => {
-            e.target.classList.toggle("DungeonMap__cell_choice");
-            e.target.classList.toggle("DungeonMap__cell_mist");
-          });
-      }
-
-    }
+     
+      // GeneratePerson();
+      // openMap();
 
   </script>
 </body>
