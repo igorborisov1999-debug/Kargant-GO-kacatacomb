@@ -9,7 +9,7 @@ function GeneratePerson() {
 
 };
 
-function getAllItems(){
+function getAllItems() {
 
   return [
     ...(Kargant.inventory.weapons || []),
@@ -20,7 +20,7 @@ function getAllItems(){
 }
 
 function updateCharacterInfo() {
-  
+
   const allItems = getAllItems();
 
   // Начинаем с имени персонажа
@@ -69,21 +69,21 @@ function updateCharacterInfo() {
 
 function GetMap() {
   map = '';
-  for (x = 0; x < 27; x++) {
+  for (x = 0; x < 53; x++) {
     map += `<div class='DungeonMap__Column'>`;
     if (x % 2 != 0) {
       s1 = '|'; s2 = '▢';
     } else {
       s1 = '◌'; s2 = '-';
     }
-    for (y = 0; y < 27; y++) {
+    for (y = 0; y < 53; y++) {
       if (y % 2 == 0) {
         s = s1;
       } else {
         s = s2;
       }
       cellClass = "DungeonMap__cell_mist";
-      if (y == 13 & x == 13) {
+      if (y == 25 & x == 25) {
         s = '▣';
         cellClass = '';
       }
@@ -100,6 +100,12 @@ function openMap() {
   document.getElementById("GamepPlay").style.display = "flex";
   document.getElementById("DungeonMap").innerHTML = GetMap();
   updateGameUI();
+  setTimeout(() => {
+            mapDragger.initSizes();
+           mapDragger.centerMap();
+        }, 0);
+
+  
   gameLogger.addLog("Вы вошли в КРИПТУ", 'player', { important: true });
 }
 
@@ -130,6 +136,7 @@ function updateGameUI() {
   const GameMenuRight = document.getElementById("GameMenuRight");
   GameMenuRight.innerHTML = updateCharacterInfo();
   updateBottomMenu();
+  
 }
 
 function showRoomActions(room) {
@@ -162,16 +169,16 @@ function updateBottomMenu() {
   // Группируем предметы по 2 в строку
   const allItems = getAllItems();
   for (let i = 0; i < 6; i += 2) {
-        inventoryHTML += `
+    inventoryHTML += `
         <div class="inventory-row">
             <div class="${allItems[i] ? 'inventory-slot' : 'empty-slot'}">
-                ${allItems[i] ? `${formatItemName(allItems[i].Name)}` : 'Тут пусто'}
+                ${allItems[i] ? `<span>А также  ${formatItemName(allItems[i].Name)}</span>` : 'Тут пусто'}
             </div>
-            <div class="${allItems[i+1] ? 'inventory-slot' : 'empty-slot'}">
-                ${allItems[i+1] ? `${formatItemName(allItems[i+1].Name)}` : 'Тут пусто'}
+            <div class="${allItems[i + 1] ? 'inventory-slot' : 'empty-slot'}">
+                ${allItems[i + 1] ? `<span>А также ${formatItemName(allItems[i + 1].Name)}</span>` : 'Тут пусто'}
             </div>
         </div>`;
-    }
+};
   inventoryCol.innerHTML = inventoryHTML;
 
   // Колонка 3: Травы
@@ -181,7 +188,7 @@ function updateBottomMenu() {
 
   for (let i = 0; i < 3; i++) {
     herbsHTML += herbs[i]
-      ? `<div>${herbs[i].Name}</div>`
+      ? `<div class= inventory-slot> ${herbs[i].Name}</div>`
       : `<div class="empty-slot">Тут пусто</div>`;
   }
   herbsCol.innerHTML = herbsHTML;
@@ -203,7 +210,7 @@ function setupBottomMenuInteractions() {
 }
 
 function formatItemName(name) {
-    return name.length > 15 
-        ? `<span class="highlight long-name">${name}</span>`
-        : `<span class="highlight">${name}</span>`;
+  return name.length > 15
+    ? `<span class="highlight long-name">${name}</span>`
+    : `<span class="highlight">${name}</span>`;
 }
