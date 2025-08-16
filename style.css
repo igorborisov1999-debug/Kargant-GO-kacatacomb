@@ -244,17 +244,20 @@ body {
 }
 
 #DungeonMap {
-    display: flex;
-    width: 100%;
-    position: relative;
     overflow: hidden;
     border: 1px solid #525151;
+    position: absolute;
+    top: 0;
+    left: 0;
+    white-space: nowrap;
 }
 
 .DungeonMap__Column {
     font-size: 200%;
     width: 100%;
     flex-direction: column;
+    display: block;
+     
 }
 
 .DungeonMap__cell {
@@ -263,7 +266,9 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    /* border: 1px solid green; */
+    width: 25px;
+    height: 25px;
+    
 }
 
 .DungeonMap__cell_mist {
@@ -406,12 +411,14 @@ body {
     grid-template-columns: 1fr 2fr 1fr;
     gap: 5px;
     padding: 8px 0;
-    border-top: 1px solid #333;
+    border: 1px solid #333;
     background: #000000;
     font-family: 'Courier New', monospace;
     font-size: 14px;
     line-height: 1.4;
     min-height: 110px; /* Фиксированная высота */
+    width: 100%; /* Фиксированная ширина (или например 600px) */
+   
 }
 
 .menu-column {
@@ -422,12 +429,14 @@ body {
 
 .menu-divider {
     border-right: 1px dashed #333;
+    border-left: 1px dashed #333;
 }
 
 .inventory-row {
     display: flex;
     justify-content: space-between;
     min-height: 24px; /* Фиксированная высота строки */
+    
 }
 
 .inventory-slot {
@@ -436,6 +445,17 @@ body {
     word-break: break-word; /* Перенос длинных слов */
     white-space: normal; /* Разрешаем переносы */
     min-height: 40px; /* Фиксированная высота для 2 строк */
+    display: flex;
+    align-items: center;
+
+}
+
+.empty-slot {
+    width: 48%;
+    padding: 2px 0;
+    color: #555;
+    font-style: italic;
+    min-height: 40px;
     display: flex;
     align-items: center;
 }
@@ -499,12 +519,4 @@ body {
         flex-grow: 1;
         justify-content: center;
     }
-}
-
-.empty-slot {
-    color: #555;
-    font-style: italic;
-    min-height: 40px;
-    display: flex;
-    align-items: center;
 }
