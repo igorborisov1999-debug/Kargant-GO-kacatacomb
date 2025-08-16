@@ -110,14 +110,14 @@ class Person {
     constructor(specialization) {
 
         this.name = "Каргант",
-            this.health = specialization.maxHealth,
-            this.maxHealth = specialization.maxHealth,
-            this.specialization = specialization.name,
-            this.gold = specialization.startGold + getRandomInRange(0, specialization.plusGold),
-            this.XP = 0,
-            this.rooms = 0,
-            this.inventory = specialization.startInventory,
-            this.coordinates = new Coordinates(0, 0, 13, 13)
+        this.health = specialization.maxHealth,
+        this.maxHealth = specialization.maxHealth,
+        this.specialization = specialization.name,
+        this.gold = specialization.startGold + getRandomInRange(0, specialization.plusGold),
+        this.XP = 0,
+        this.rooms = 0,
+        this.inventory = specialization.startInventory,
+         this.coordinates = new Coordinates(0, 0, 13, 13)
     }
 }
 
@@ -125,10 +125,10 @@ class Tool {
     constructor(name, description, type, cost, property) {
 
         this.name = name,
-            this.type = type,
-            this.description = description,
-            this.cost = cost,
-            this.property = property
+        this.type = type,
+        this.description = description,
+        this.cost = cost,
+        this.property = property
 
     }
 }
@@ -196,8 +196,8 @@ let Specializations = [
         {
             weapons: [getRandomWeapon()],
             tools: [getRandomTool()],
-            scrolls: [],
-            herbs: []
+            scrolls: [getRandomTool(),getRandomTool(),getRandomTool(),getRandomTool()],
+            herbs: [getRandomTool(),getRandomTool()]
         }
     ),
 
@@ -260,4 +260,61 @@ class GameLogger {
         }, delay * 1000);
     }
 
+}
+
+class MapDragger {
+  constructor(containerId, mapId) {
+    this.container = document.getElementById(containerId);
+    this.map = document.getElementById(mapId);
+    this.isDragging = false;
+    this.startPos = { x: 0, y: 0 };
+    this.currentTranslate = { x: 0, y: 0 };
+
+    this.initEvents();
+  }
+
+  initEvents() {
+    this.map.addEventListener('mousedown', this.startDrag.bind(this));
+    document.addEventListener('mousemove', this.drag.bind(this));
+    document.addEventListener('mouseup', this.endDrag.bind(this));
+    
+    // Для тач-устройств
+    this.map.addEventListener('touchstart', this.startDrag.bind(this));
+    document.addEventListener('touchmove', this.drag.bind(this));
+    document.addEventListener('touchend', this.endDrag.bind(this));
+  }
+
+  startDrag(e) {
+    this.isDragging = true;
+    this.startPos = {
+      x: e.clientX || e.touches[0].clientX,
+      y: e.clientY || e.touches[0].clientY
+    };
+    this.map.style.cursor = 'grabbing';
+  }
+
+  drag(e) {
+    if (!this.isDragging) return;
+    e.preventDefault();
+    
+    const currentPos = {
+      x: e.clientX || e.touches[0].clientX,
+      y: e.clientY || e.touches[0].clientY
+    };
+    
+    this.currentTranslate.x += currentPos.x - this.startPos.x;
+    this.currentTranslate.y += currentPos.y - this.startPos.y;
+    
+    this.startPos = { ...currentPos };
+    this.updateMapPosition();
+  }
+
+  endDrag() {
+    this.isDragging = false;
+    this.map.style.cursor = 'grab';
+  }
+
+  updateMapPosition() {
+    this.map.style.transform = `translate(${this.currentTranslate.x}px, ${this.currentTranslate.y}px)`;
+  }
 }
