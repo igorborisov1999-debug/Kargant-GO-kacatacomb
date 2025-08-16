@@ -27,12 +27,15 @@
   <div id="GamepPlay">
     <div id="GamepPlayUP">
       <div id="GameMenuLeft" class="scrollable-panel">
+        <div class="log-container"></div>
         <!-- Логи будут здесь -->
       </div>
 
       <div id="MainScreen">
-        <div id="DungeonMap" class="centered-map">
-          <!-- Карта будет здесь -->
+        <div id="MapContainer" class="draggable-map">
+          <div id="DungeonMap" class="centered-map">
+            <!-- Карта будет здесь -->
+          </div>
         </div>
         <div id="DungeonEvent" style="display:none;">
           <!-- События -->
@@ -44,19 +47,28 @@
       </div>
     </div>
     <div id="GameMenuBottom">
-      <div id="roomActions" style="display: none;">
-        <button id="searchDoorsBtn" class="button">Искать двери</button>
-        <button id="confirmDoorsBtn" class="button" style="display: none;">Готово</button>
-        <button id="moveOnBtn" class="button">Идти дальше</button>
-      </div>
-      <button class="button" onclick="PathChoice()"> ВЫБРАТЬ </button>
+    <!-- Колонка 1: Статус -->
+    <div class="menu-column">
+       
     </div>
+    
+    <!-- Колонка 2: Инвентарь -->
+    <div class="menu-column menu-divider">
+        
+    </div>
+    
+    <!-- Колонка 3: Травы -->
+    <div class="menu-column">
+      
+    </div>
+</div>
   </div>
 
   <script>
 
     let Kargant;
     const gameLogger = new GameLogger();
+    new MapDragger('MapContainer', 'DungeonMap');
 
     setTimeout(
       () => {
@@ -65,9 +77,8 @@
 
     GeneratePerson();
     openMap();
-     
-    window.addEventListener('load', resizePanels);
-    window.addEventListener('resize', resizePanels);
+
+   
 
   </script>
 </body>
