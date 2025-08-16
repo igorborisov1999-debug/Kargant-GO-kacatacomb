@@ -110,14 +110,14 @@ class Person {
     constructor(specialization) {
 
         this.name = "Каргант",
-        this.health = specialization.maxHealth,
-        this.maxHealth = specialization.maxHealth,
-        this.specialization = specialization.name,
-        this.gold = specialization.startGold + getRandomInRange(0, specialization.plusGold),
-        this.XP = 0,
-        this.rooms = 0,
-        this.inventory = specialization.startInventory,
-         this.coordinates = new Coordinates(0, 0, 13, 13)
+            this.health = specialization.maxHealth,
+            this.maxHealth = specialization.maxHealth,
+            this.specialization = specialization.name,
+            this.gold = specialization.startGold + getRandomInRange(0, specialization.plusGold),
+            this.XP = 0,
+            this.rooms = 0,
+            this.inventory = specialization.startInventory,
+            this.coordinates = new Coordinates(0, 0, 25, 25)
     }
 }
 
@@ -125,10 +125,10 @@ class Tool {
     constructor(name, description, type, cost, property) {
 
         this.name = name,
-        this.type = type,
-        this.description = description,
-        this.cost = cost,
-        this.property = property
+            this.type = type,
+            this.description = description,
+            this.cost = cost,
+            this.property = property
 
     }
 }
@@ -196,8 +196,8 @@ let Specializations = [
         {
             weapons: [getRandomWeapon()],
             tools: [getRandomTool()],
-            scrolls: [getRandomTool(),getRandomTool(),getRandomTool(),getRandomTool()],
-            herbs: [getRandomTool(),getRandomTool()]
+            scrolls: [getRandomTool(), getRandomTool(), getRandomTool(), getRandomTool()],
+            herbs: [getRandomTool(), getRandomTool()]
         }
     ),
 
@@ -263,37 +263,39 @@ class GameLogger {
 }
 
 class MapDragger {
-  constructor(containerId, mapId) {
-    this.container = document.getElementById(containerId);
-    this.map = document.getElementById(mapId);
-    this.isDragging = false;
-    this.startPos = { x: 0, y: 0 };
-    this.currentTranslate = { x: 0, y: 0 };
+    constructor(containerId, mapId) {
+        this.container          = document.getElementById(containerId);
+        this.map                = document.getElementById(mapId);
+        this.isDragging         = false;
+        this.startPos           = { x: 0, y: 0 };
+        this.currentTranslate   = { x: 0, y: 0 };
+        this.cellSize           = 25;
+        this.totalCells         = 53;
 
-    this.initEvents();
-  }
+        this.initEvents();
+    }
 
-  initEvents() {
-    this.map.addEventListener('mousedown', this.startDrag.bind(this));
-    document.addEventListener('mousemove', this.drag.bind(this));
-    document.addEventListener('mouseup', this.endDrag.bind(this));
-    
-    // Для тач-устройств
-    this.map.addEventListener('touchstart', this.startDrag.bind(this));
-    document.addEventListener('touchmove', this.drag.bind(this));
-    document.addEventListener('touchend', this.endDrag.bind(this));
-  }
+    initEvents() {
+        this.map.addEventListener('mousedown', this.startDrag.bind(this));
+        document.addEventListener('mousemove', this.drag.bind(this));
+        document.addEventListener('mouseup', this.endDrag.bind(this));
 
-  startDrag(e) {
-    this.isDragging = true;
-    this.startPos = {
-      x: e.clientX || e.touches[0].clientX,
-      y: e.clientY || e.touches[0].clientY
-    };
-    this.map.style.cursor = 'grabbing';
-  }
+        // Для тач-устройств
+        this.map.addEventListener('touchstart', this.startDrag.bind(this));
+        document.addEventListener('touchmove', this.drag.bind(this));
+        document.addEventListener('touchend', this.endDrag.bind(this));
+    }
 
-  drag(e) {
+    startDrag(e) {
+        this.isDragging = true;
+        this.startPos = {
+            x: e.clientX || e.touches[0].clientX,
+            y: e.clientY || e.touches[0].clientY
+        };
+        this.map.style.cursor = 'grabbing';
+    }
+
+    drag(e) {
     if (!this.isDragging) return;
     e.preventDefault();
     
@@ -302,19 +304,55 @@ class MapDragger {
       y: e.clientY || e.touches[0].clientY
     };
     
-    this.currentTranslate.x += currentPos.x - this.startPos.x;
-    this.currentTranslate.y += currentPos.y - this.startPos.y;
+    const newX = this.currentTranslate.x + (currentPos.x - this.startPos.x);
+    const newY = this.currentTranslate.y + (currentPos.y - this.startPos.y);
+    
+    // Границы перетаскивания (учитываем размеры карты и контейнера)
+    const maxX = 50;
+    const maxY = 50;
+    const minX = -400
+    const minY = -50;
+    this.currentTranslate.x = Math.min(maxX, Math.max(minX, newX));
+    this.currentTranslate.y = Math.min(maxY, Math.max(minY, newY));
     
     this.startPos = { ...currentPos };
     this.updateMapPosition();
   }
 
-  endDrag() {
-    this.isDragging = false;
-    this.map.style.cursor = 'grab';
-  }
+    endDrag() {
+        this.isDragging = false;
+        this.map.style.cursor = 'grab';
+        console.log(this);
+    }
 
-  updateMapPosition() {
-    this.map.style.transform = `translate(${this.currentTranslate.x}px, ${this.currentTranslate.y}px)`;
-  }
+    updateMapPosition() {
+        this.map.style.transform = `translate(${this.currentTranslate.x}px, ${this.currentTranslate.y}px)`;
+    }
+
+    initSizes() {
+        // Получаем точные размеры с учетом стилей
+        const style = window.getComputedStyle(this.container);
+        this.containerRect = {
+            width: this.container.clientWidth - 
+                  parseFloat(style.paddingLeft) - 
+                  parseFloat(style.paddingRight),
+            height: this.container.clientHeight - 
+                   parseFloat(style.paddingTop) - 
+                   parseFloat(style.paddingBottom)
+        };
+
+        this.mapWidth = this.totalCells * this.cellSize;
+        this.mapHeight = this.totalCells * this.cellSize;
+    }
+
+    centerMap() {
+       
+        this.currentTranslate = {
+            x: -155,
+            y: 0
+        };
+
+        this.updateMapPosition();
+    }
+
 }
