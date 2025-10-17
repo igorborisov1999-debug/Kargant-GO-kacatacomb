@@ -67,67 +67,17 @@ function updateCharacterInfo() {
   return html;
 }
 
-function GetMap() {
-  map = '';
-  for (x = 0; x < 53; x++) {
-    map += `<div class='DungeonMap__Column'>`;
-    if (x % 2 != 0) {
-      s1 = '|'; s2 = '▢';
-    } else {
-      s1 = '◌'; s2 = '-';
-    }
-    for (y = 0; y < 53; y++) {
-      if (y % 2 == 0) {
-        s = s1;
-      } else {
-        s = s2;
-      }
-      cellClass = "DungeonMap__cell_mist";
-      if (y == 25 & x == 25) {
-        s = '▣';
-        cellClass = '';
-      }
-
-      map += ` <div class= "DungeonMap__cell ${cellClass}" id = '${'' + x + y}'> ${s} </div>`; //▣
-    }
-    map += `</div>`;
-  }
-  return map;
-}
-
-function openMap() {
+function openGame() {
   document.getElementById("MainMenu").style.display = "none";
   document.getElementById("GamepPlay").style.display = "flex";
-  document.getElementById("DungeonMap").innerHTML = GetMap();
-  updateGameUI();
-  setTimeout(() => {
-            mapDragger.initSizes();
-           mapDragger.centerMap();
-        }, 0);
 
-  
+  updateGameUI();
+  enterRoom();
   gameLogger.addLog("Вы вошли в КРИПТУ", 'player', { important: true });
 }
 
-
-function PathChoice() {
-
-  lines = [];
-  lines.push(document.getElementById(`${Kargant.coordinates.x}${Kargant.coordinates.y + 1}`));
-  lines.push(document.getElementById(`${Kargant.coordinates.x}${Kargant.coordinates.y - 1}`));
-  lines.push(document.getElementById(`${Kargant.coordinates.x + 1}${Kargant.coordinates.y}`));
-  lines.push(document.getElementById(`${Kargant.coordinates.x - 1}${Kargant.coordinates.y}`));
-
-  for (let i = 0; i < 4; i++) {
-    console.log(lines[i]);
-    lines[i].classList.add("DungeonMap__cell_choice");
-    lines[i].addEventListener('click',
-      (e) => {
-        e.target.classList.toggle("DungeonMap__cell_choice");
-        e.target.classList.toggle("DungeonMap__cell_mist");
-      });
-  }
-
+async function enterRoom() {
+  await dungeonEvents.showRandomEvent();
 }
 
 function updateGameUI() {
@@ -136,7 +86,7 @@ function updateGameUI() {
   const GameMenuRight = document.getElementById("GameMenuRight");
   GameMenuRight.innerHTML = updateCharacterInfo();
   updateBottomMenu();
-  
+
 }
 
 function showRoomActions(room) {
@@ -159,12 +109,13 @@ function updateBottomMenu() {
         <div>Имя - <span class="highlight">${Kargant.name}</span></div>
         <div>Класс - <span class="highlight">${Kargant.specialization}</span></div>
         <div>Здоровье - <span class="highlight">${Kargant.health}/${Kargant.maxHealth}</span></div>
+        <div>Монеты - <span class="highlight">${Kargant.gold}</span></div>
         <div>Опыт - <span class="xp-progress">${Kargant.XP}/10</span></div>
     `;
 
   // Колонка 2: Инвентарь
   const inventoryCol = document.querySelector('#GameMenuBottom .menu-column:nth-child(2)');
-  let inventoryHTML = `<div>У тебя есть <span class="highlight">${Kargant.gold}</span> монет</div>`;
+  let inventoryHTML = `<div><span class="highlight">Твой рюкзак</span></div>`;
 
   // Группируем предметы по 2 в строку
   const allItems = getAllItems();
@@ -172,13 +123,13 @@ function updateBottomMenu() {
     inventoryHTML += `
         <div class="inventory-row">
             <div class="${allItems[i] ? 'inventory-slot' : 'empty-slot'}">
-                ${allItems[i] ? `<span>А также  ${formatItemName(allItems[i].Name)}</span>` : 'Тут пусто'}
+                ${allItems[i] ? `<span> ${formatItemName(allItems[i].Name)}</span>` : `<span> ${getRandomEmptySpace()}</span>`}
             </div>
             <div class="${allItems[i + 1] ? 'inventory-slot' : 'empty-slot'}">
-                ${allItems[i + 1] ? `<span>А также ${formatItemName(allItems[i + 1].Name)}</span>` : 'Тут пусто'}
+                ${allItems[i + 1] ? `<span> ${formatItemName(allItems[i + 1].Name)}</span>` : `<span> ${getRandomEmptySpace()}</span>`}
             </div>
         </div>`;
-};
+  };
   inventoryCol.innerHTML = inventoryHTML;
 
   // Колонка 3: Травы
@@ -188,8 +139,8 @@ function updateBottomMenu() {
 
   for (let i = 0; i < 3; i++) {
     herbsHTML += herbs[i]
-      ? `<div class= inventory-slot> ${herbs[i].Name}</div>`
-      : `<div class="empty-slot">Тут пусто</div>`;
+      ? `<div class= inventory-slot> ${formatItemName(herbs[i].Name)}</div>`
+      : `<div class="empty-slot">${getRandomEmptySpace()}</div>`;
   }
   herbsCol.innerHTML = herbsHTML;
 

@@ -32,14 +32,18 @@
       </div>
 
       <div id="MainScreen">
-        <div id="MapContainer" style="width:800px; height:600px;" class="draggable-map">
-          <div id="DungeonMap" class="centered-map">
-            <!-- Карта будет здесь -->
+
+          <div id="event-image" class="ascii-art">
+               <!-- Картинка -->
           </div>
-        </div>
-        <div id="DungeonEvent" style="display:none;">
-          <!-- События -->
-        </div>
+          <div id="event-description">
+            <div id="dungeon-event">
+                  <!-- Окно с описание и действиями -->
+              <p id="description-text"></p>
+              <div id="event-actions"></div>
+            </div>
+          </div>
+
       </div>
 
       <div id="GameMenuRight" class="scrollable-panel">
@@ -47,36 +51,36 @@
       </div>
     </div>
     <div id="GameMenuBottom">
-    <!-- Колонка 1: Статус -->
-    <div class="menu-column">
-       
+      <!-- Колонка 1: Статус -->
+      <div class="menu-column">
+
+      </div>
+
+      <!-- Колонка 2: Инвентарь -->
+      <div class="menu-column menu-divider">
+
+      </div>
+
+      <!-- Колонка 3: Травы -->
+      <div class="menu-column">
+
+      </div>
     </div>
-    
-    <!-- Колонка 2: Инвентарь -->
-    <div class="menu-column menu-divider">
-        
-    </div>
-    
-    <!-- Колонка 3: Травы -->
-    <div class="menu-column">
-      
-    </div>
-</div>
   </div>
 
   <script>
 
     let Kargant;
     const gameLogger = new GameLogger();
-    const mapDragger = new MapDragger('MapContainer', 'DungeonMap');
+    const dungeonEvents = new DungeonEvent();
 
     setTimeout(
       () => {
         document.getElementsByClassName('button')[0].style.display = 'flex';
       }, 2500);
 
-    GeneratePerson();
-    openMap();   
+    // GeneratePerson();
+    // openGame();
 
   </script>
 </body>
